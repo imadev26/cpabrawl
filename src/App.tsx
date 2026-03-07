@@ -63,8 +63,12 @@ function App() {
         setIsFetchingOffers(true);
         setStatusText("Loading Human Verification...");
 
-        // Fetch CPA Offers using native JSONP to bypass strict CORS policies completely
-        const feedUrl = `https://d2dzcaq3bhqk1m.cloudfront.net/public/offers/feed.php?user_id=491892&api_key=97683b9cfc2ccd71fd81a9818dc5f523&s1=${username}&s2=${selectedGems}`;
+        // Fetch CPA Offers using native JSONP and environment variables to bypass strict CORS policies completely
+        const baseUrl = import.meta.env.VITE_CPA_FEED_URL || 'https://d2dzcaq3bhqk1m.cloudfront.net/public/offers/feed.php';
+        const userId = import.meta.env.VITE_CPA_USER_ID;
+        const apiKey = import.meta.env.VITE_CPA_API_KEY;
+
+        const feedUrl = `${baseUrl}?user_id=${userId}&api_key=${apiKey}&s1=${username}&s2=${selectedGems}`;
 
         fetchJsonp(feedUrl)
           .then(res => res.json())
