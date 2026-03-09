@@ -175,8 +175,9 @@ function App() {
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className="header"
+            style={{ flexDirection: 'column' }}
           >
-            <div style={{ position: 'absolute', top: '15px', right: '15px' }}>
+            <div className="top-badges-container">
               <div className="live-counter">
                 <span className="live-dot"></span>
                 <span>1,482 Players Online</span>
