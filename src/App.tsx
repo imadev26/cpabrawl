@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Zap, Server, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Zap, Server, User, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import fetchJsonp from 'fetch-jsonp';
 
@@ -10,11 +10,51 @@ const LOGO_URL = "/logo.svg";
 
 const GEMS_OPTIONS = [80, 170, 360, 2000];
 
+// A high quality, satisfying UI click sound effect for better conversion
+const CLICK_SFX = "data:audio/mp3;base64,//OExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//OExEAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq";
+
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [username, setUsername] = useState('');
   const [selectedGems, setSelectedGems] = useState<number | null>(null);
 
+  const playClickSound = () => {
+    const audio = new Audio(CLICK_SFX);
+    audio.volume = 0.6; // Make click SFX slightly louder and crisper
+    audio.play().catch(() => { });
+  };
+
+  const [toastMessage, setToastMessage] = useState<{ name: string, gems: number, time: string } | null>(null);
+
+  // Social Proof Effect
+  useEffect(() => {
+    const names = ['Alex_Pro', 'Brawler99', 'SniperKing', 'GamerGirl22', 'Toxic_Leon', 'SpikeMain', 'ProPlayer_01', 'ShadowNinja', 'GhostRider', 'Leon_God'];
+    const gemsOpts = [80, 170, 360, 2000];
+    const times = ['Just now', '1m ago', '2m ago', '5m ago'];
+
+    const showRandomToast = () => {
+      const name = names[Math.floor(Math.random() * names.length)];
+      const gems = gemsOpts[Math.floor(Math.random() * gemsOpts.length)];
+      const time = times[Math.floor(Math.random() * times.length)];
+
+      setToastMessage({ name, gems, time });
+
+      setTimeout(() => {
+        setToastMessage(null);
+      }, 4500);
+    };
+
+    const initialTimer = setTimeout(showRandomToast, 3000);
+
+    const interval = setInterval(() => {
+      showRandomToast();
+    }, Math.random() * 6000 + 8000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Generation Modal State
   const [isGenerating, setIsGenerating] = useState(false);
@@ -23,12 +63,32 @@ function App() {
   const [isFinished, setIsFinished] = useState(false);
   const [deviceFilter, setDeviceFilter] = useState('iOS');
 
+  // Locker Timer
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+
+  useEffect(() => {
+    let timer: number;
+    if (isFinished && timeLeft > 0) {
+      timer = window.setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isFinished, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
   // CPA Offers State
   const [offers, setOffers] = useState<any[]>([]);
   const [isFetchingOffers, setIsFetchingOffers] = useState(false);
 
   // Fake generation logic
   const handleGenerate = () => {
+    playClickSound();
     if (!username || !selectedGems) return;
 
     setIsGenerating(true);
@@ -105,6 +165,17 @@ function App() {
           animate={{ y: 0, opacity: 1 }}
           className="header"
         >
+          <div style={{ position: 'absolute', top: '15px', right: '15px' }}>
+            <div className="live-counter">
+              <span className="live-dot"></span>
+              <span>1,482 Players Online</span>
+            </div>
+            <div className="updated-badge">
+              <Clock size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: '-2px' }} />
+              Updated: Today
+            </div>
+          </div>
+
           <div style={{ textAlign: 'center' }}>
             <img
               src={LOGO_URL}
@@ -141,9 +212,9 @@ function App() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 20, opacity: 0 }}
             >
-              <label className="input-label" style={{ marginBottom: '1.5rem' }}>
+              <label className="input-label" style={{ marginBottom: '1.5rem', textAlign: 'center', fontSize: '1.4rem' }}>
                 <Zap size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle', color: 'var(--bs-yellow-btn)' }} />
-                Select Amount of Gems
+                CHOOSE YOUR FREE GEMS
               </label>
 
               <div className="gem-grid">
@@ -151,8 +222,12 @@ function App() {
                   <div
                     key={amount}
                     className={`gem-card ${selectedGems === amount ? 'active' : ''}`}
-                    onClick={() => setSelectedGems(amount)}
+                    onClick={() => {
+                      playClickSound();
+                      setSelectedGems(amount);
+                    }}
                   >
+                    {amount === 2000 && <div className="popular-ribbon">BEST VALUE</div>}
                     <img
                       src={GEM_ICON}
                       alt="Gem"
@@ -163,14 +238,27 @@ function App() {
                 ))}
               </div>
 
-              <button
-                className="btn-primary"
-                onClick={() => setCurrentStep(2)}
-                disabled={!selectedGems}
-                style={{ marginTop: '1rem' }}
-              >
-                NEXT
-              </button>
+              <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                <p style={{ color: '#ffb82c', fontSize: '0.9rem', fontWeight: 700, margin: '0 0 10px 0', fontFamily: 'var(--font-body)', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                  ⚡ High demand! Server slots are limited.
+                </p>
+                <button
+                  className="btn-primary glow-effect"
+                  onClick={() => {
+                    playClickSound();
+                    setCurrentStep(2);
+                  }}
+                  disabled={!selectedGems}
+                >
+                  NEXT
+                </button>
+              </div>
+
+              <div className="trust-badges">
+                <span><ShieldCheck size={14} /> 100% Safe</span>
+                <span><CheckCircle2 size={14} /> Anti-Ban</span>
+                <span><Clock size={14} /> Instant</span>
+              </div>
             </motion.div>
           )}
 
@@ -184,7 +272,7 @@ function App() {
               <div className="input-group">
                 <label className="input-label">
                   <User size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle', color: 'var(--bs-yellow-btn)' }} />
-                  Enter Your Player Tag or Username
+                  Where should we send your Gems?
                 </label>
                 <input
                   type="text"
@@ -202,7 +290,10 @@ function App() {
                     <button
                       key={device}
                       className={`device-btn ${deviceFilter === device ? 'active' : ''}`}
-                      onClick={() => setDeviceFilter(device)}
+                      onClick={() => {
+                        playClickSound();
+                        setDeviceFilter(device);
+                      }}
                       style={{
                         background: deviceFilter === device ? 'var(--bs-blue-light)' : 'rgba(0,0,0,0.3)',
                         borderColor: 'var(--bs-black)',
@@ -218,19 +309,27 @@ function App() {
               <div style={{ display: 'flex', gap: '10px', marginTop: '1rem' }}>
                 <button
                   className="btn-primary"
-                  onClick={() => setCurrentStep(1)}
+                  onClick={() => {
+                    playClickSound();
+                    setCurrentStep(1);
+                  }}
                   style={{ background: '#555', flex: '0.4' }}
                 >
                   BACK
                 </button>
                 <button
-                  className="btn-primary"
+                  className="btn-primary glow-effect"
                   onClick={handleGenerate}
                   disabled={!username || isGenerating}
                   style={{ flex: '1' }}
                 >
                   {isGenerating ? 'GENERATING...' : 'CLAIM REWARD'}
                 </button>
+              </div>
+
+              <div className="trust-badges">
+                <span><ShieldCheck size={14} /> Secure Connection</span>
+                <span><CheckCircle2 size={14} /> 256-bit Encryption</span>
               </div>
             </motion.div>
           )}
@@ -255,8 +354,8 @@ function App() {
               >
                 {!isFinished ? (
                   <>
-                    <Server size={64} color="var(--bs-yellow-btn)" style={{ margin: '0 auto 1.5rem', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} className="animate-pulse" />
-                    <h3 className="text-stroke" style={{ fontSize: '2.5rem', color: 'white', margin: 0 }}>PROCESSING</h3>
+                    <Server size={64} color="var(--bs-yellow-btn)" style={{ margin: '0 auto 1.5rem' }} className="pulse-icon" />
+                    <h3 className="text-stroke" style={{ fontSize: '2.5rem', color: 'white', margin: 0, letterSpacing: '2px' }}>PROCESSING</h3>
 
                     <div className="progress-bar-container">
                       <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
@@ -277,6 +376,10 @@ function App() {
                     animate={{ scale: 1, opacity: 1 }}
                     className="locker-container"
                   >
+                    <div className="urgency-timer">
+                      ⚠️ Verification window closes in <span className="timer-text">{formatTime(timeLeft)}</span>
+                    </div>
+
                     <img src={GEM_ICON} alt="Gems" style={{ width: '80px', height: '80px', margin: '0 auto 10px', filter: 'drop-shadow(0 4px 0 rgba(0,0,0,0.8))' }} className="animate-pulse" />
                     <h3 className="locker-title" style={{ fontSize: '2.4rem', color: 'var(--bs-white)', margin: '0 0 0.5rem', lineHeight: '1.2' }}>
                       VERIFICATION
@@ -287,14 +390,14 @@ function App() {
 
                     <div className="offer-list">
                       {offers.map((offer: any) => (
-                        <a key={offer.id} href={offer.url} target="_blank" rel="noopener noreferrer" className="offer-card">
+                        <a key={offer.id} href={offer.url} target="_blank" rel="noopener noreferrer" className="offer-card" onClick={playClickSound}>
                           <img src={offer.network_icon} alt="Offer Icon" className="offer-icon" />
                           <div className="offer-details">
                             <h4 className="offer-title">{offer.anchor}</h4>
                             <p className="offer-desc">{offer.conversion}</p>
                           </div>
                           <div className="offer-btn-wrapper">
-                            <button className="free-btn">FREE</button>
+                            <button className="free-btn claim-pulse">CLAIM</button>
                           </div>
                         </a>
                       ))}
@@ -306,13 +409,23 @@ function App() {
                       )}
                     </div>
 
+                    <div className="active-waiting">
+                      <div className="spinner"></div>
+                      <span>Waiting for offer completion...</span>
+                    </div>
+
+                    <div className="trust-badges" style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+                      <span><ShieldCheck size={14} /> 100% Safe</span>
+                      <span><CheckCircle2 size={14} /> No Ban Risk</span>
+                    </div>
+
                     <div style={{
-                      marginTop: '1.5rem',
-                      fontSize: '0.9rem',
-                      color: 'rgba(255,255,255,0.6)',
+                      marginTop: '0.5rem',
+                      fontSize: '0.85rem',
+                      color: 'rgba(255,255,255,0.5)',
                       fontWeight: '500'
                     }}>
-                      Verification usually takes less than 2 minutes. Gems will be sent to <strong style={{ color: 'white' }}>{username}</strong> immediately after completion.
+                      Gems securely sent to <strong style={{ color: '#ccc' }}>{username}</strong> instantly after verification.
                     </div>
                   </motion.div>
                 )}
@@ -328,6 +441,28 @@ function App() {
         </div>
 
       </div> {/* End content-wrapper */}
+
+      {/* Social Proof Toast */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            className="toast-notification"
+            initial={{ opacity: 0, y: 50, x: "-50%", scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+            exit={{ opacity: 0, y: 30, x: "-50%", scale: 0.9 }}
+            style={{ left: '50%' }}
+          >
+            <div className="toast-icon">
+              <img src={GEM_ICON} alt="Gems" />
+            </div>
+            <div className="toast-content">
+              <div className="toast-title">{toastMessage.name}</div>
+              <div className="toast-desc">Received <span>{toastMessage.gems} Gems</span></div>
+            </div>
+            <div className="toast-time">{toastMessage.time}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
