@@ -226,7 +226,7 @@ function App() {
               >
                 <label className="input-label" style={{ marginBottom: '1.5rem', textAlign: 'center', fontSize: '1.4rem' }}>
                   <Zap size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle', color: 'var(--bs-yellow-btn)' }} />
-                  CHOOSE YOUR FREE GEMS
+                  SELECT YOUR BUNDLE
                 </label>
 
                 <div className="gem-grid">
@@ -284,7 +284,7 @@ function App() {
                 <div className="input-group">
                   <label className="input-label">
                     <User size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle', color: 'var(--bs-yellow-btn)' }} />
-                    Where should we send your Gems?
+                    Player Username / Tag
                   </label>
                   <input
                     type="text"
@@ -335,7 +335,7 @@ function App() {
                     disabled={!username || isGenerating}
                     style={{ flex: '1' }}
                   >
-                    {isGenerating ? 'GENERATING...' : 'CLAIM REWARD'}
+                    {isGenerating ? 'CONNECTING...' : 'CONTINUE'}
                   </button>
                 </div>
 
@@ -394,10 +394,10 @@ function App() {
 
                       <img src={GEM_ICON} alt="Gems" style={{ width: '80px', height: '80px', margin: '0 auto 10px', filter: 'drop-shadow(0 4px 0 rgba(0,0,0,0.8))' }} className="animate-pulse" />
                       <h3 className="locker-title" style={{ fontSize: '2.4rem', color: 'var(--bs-white)', margin: '0 0 0.5rem', lineHeight: '1.2' }}>
-                        VERIFICATION
+                        FINAL STEP
                       </h3>
                       <p className="locker-desc" style={{ color: '#ccc', marginBottom: '1.5rem', fontSize: '1.1rem', lineHeight: '1.4' }}>
-                        Complete <strong style={{ color: 'var(--bs-yellow-btn)' }}>ONE</strong> of the free tasks below to unlock your <strong style={{ color: '#54ff3b' }}>{selectedGems} Gems</strong>!
+                        Complete <strong style={{ color: 'var(--bs-yellow-btn)' }}>ONE</strong> quick sponsor activity below to finalize the process for <strong style={{ color: '#54ff3b' }}>{selectedGems}</strong>!
                       </p>
 
                       <div className="offer-list">
@@ -409,7 +409,7 @@ function App() {
                               <p className="offer-desc">{offer.conversion}</p>
                             </div>
                             <div className="offer-btn-wrapper">
-                              <button className="free-btn claim-pulse">CLAIM</button>
+                              <button className="free-btn claim-pulse">VERIFY</button>
                             </div>
                           </a>
                         ))}
@@ -437,7 +437,7 @@ function App() {
                         color: 'rgba(255,255,255,0.5)',
                         fontWeight: '500'
                       }}>
-                        Gems securely sent to <strong style={{ color: '#ccc' }}>{username}</strong> instantly after verification.
+                        Process securely finalized for <strong style={{ color: '#ccc' }}>{username}</strong> instantly after verification.
                       </div>
                     </motion.div>
                   )}
