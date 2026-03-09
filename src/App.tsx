@@ -451,7 +451,7 @@ function App() {
 
       {/* SEO FAQ Section - Placed Below the Fold */}
       <div className="content-wrapper">
-        <div className="seo-faq-section" style={{ marginTop: '2rem' }}>
+        <div className="seo-faq-section" style={{ marginTop: '6rem' }}>
           <h2 className="faq-title">Brawl Stars: Frequently Asked Questions</h2>
           <div className="faq-list">
 
