@@ -165,8 +165,8 @@ function App() {
   return (
     <div className="app-container" style={{ justifyContent: 'flex-start' }}>
 
-      {/* 100vh Hero Section to keep generator perfectly centered */}
-      <div className="hero-section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+      {/* 100vh Hero Section to keep generator perfectly centered with huge margin below */}
+      <div className="hero-section">
         {/* Centered Content Wrapper */}
         <div className="content-wrapper">
 

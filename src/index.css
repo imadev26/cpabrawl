@@ -858,6 +858,17 @@ h4 {
 }
 
 /* SEO FAQ Section */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  margin-bottom: 8rem;
+  /* Massive gap to push FAQ down */
+}
+
 .seo-faq-section {
   margin-top: 4rem;
   margin-bottom: 2rem;
