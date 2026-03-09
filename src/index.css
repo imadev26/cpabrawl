@@ -193,23 +193,14 @@ h4 {
 }
 
 .top-badges-container {
+  position: absolute;
+  top: 10px;
+  right: 15px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
-  margin-bottom: 1rem;
-  width: 100%;
-}
-
-@media (min-width: 600px) {
-  .top-badges-container {
-    position: absolute;
-    top: -10px;
-    right: 0px;
-    align-items: flex-end;
-    margin-bottom: 0;
-    width: auto;
-  }
+  z-index: 10;
 }
 
 /* Panel Design mimicking the store cards */
@@ -873,6 +864,8 @@ h4 {
   margin-bottom: 4rem;
   width: 100%;
   max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
   background: rgba(10, 20, 40, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
