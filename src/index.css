@@ -865,13 +865,11 @@ h4 {
   align-items: center;
   width: 100%;
   min-height: 100vh;
-  padding-bottom: 10vh;
-  /* Keeps generator roughly centered but pushes everything else down */
 }
 
 .seo-faq-section {
-  margin-top: 10vh;
-  /* Powerful gap based on viewport height */
+  margin-top: 250px;
+  /* Absolute massive gap to guarantee separation */
   margin-bottom: 4rem;
   width: 100%;
   max-width: 700px;
