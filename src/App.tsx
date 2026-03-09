@@ -63,6 +63,14 @@ function App() {
   const [isFinished, setIsFinished] = useState(false);
   const [deviceFilter, setDeviceFilter] = useState('iOS');
 
+  // SEO FAQ State
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+    playClickSound();
+  };
+
   // Locker Timer
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
 
@@ -433,6 +441,65 @@ function App() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* SEO FAQ Section */}
+        <div className="seo-faq-section">
+          <h2 className="faq-title">Brawl Stars: Frequently Asked Questions</h2>
+          <div className="faq-list">
+
+            <div className={`faq-item ${openFaq === 0 ? 'open' : ''}`} onClick={() => toggleFaq(0)}>
+              <div className="faq-question">
+                <h3>Who is the Best Brawler in Brawl Stars?</h3>
+                <span className="faq-icon">{openFaq === 0 ? '−' : '+'}</span>
+              </div>
+              <div className="faq-answer">
+                <p>The <strong>best brawler in Brawl Stars</strong> often changes depending on the current meta and the specific game mode. Historically, highly mobile and high-damage brawlers dominate. According to the latest <strong>Brawl Stars tier list</strong>, assassins and controllers are top picks. Many players argue that finding a brawler whose playstyle matches yours is more important than raw stats. For consistent climbing, mastering a mix of snipers and tanks is recommended.</p>
+              </div>
+            </div>
+
+            <div className={`faq-item ${openFaq === 1 ? 'open' : ''}`} onClick={() => toggleFaq(1)}>
+              <div className="faq-question">
+                <h3>Is Surge Brawl Stars good in the current meta?</h3>
+                <span className="faq-icon">{openFaq === 1 ? '−' : '+'}</span>
+              </div>
+              <div className="faq-answer">
+                <p>Yes, <strong>Surge Brawl Stars</strong> remains an exceptionally strong pick. His unique upgrade mechanic allows him to snowball matches once he reaches Stage 3 or 4. He is particularly lethal in Solo Showdown and Brawl Ball. To counter him, you need long-range brawlers who can prevent him from getting his first super. When fully upgraded, Surge is arguably one of the most powerful damage dealers in the game.</p>
+              </div>
+            </div>
+
+            <div className={`faq-item ${openFaq === 2 ? 'open' : ''}`} onClick={() => toggleFaq(2)}>
+              <div className="faq-question">
+                <h3>How to play Edgar Brawl Stars effectively?</h3>
+                <span className="faq-icon">{openFaq === 2 ? '−' : '+'}</span>
+              </div>
+              <div className="faq-answer">
+                <p><strong>Edgar Brawl Stars</strong> is a fierce close-range assassin. The key to playing Edgar is patience. You must wait for your super to auto-charge or use the "Let's Fly" gadget. Once your super is ready, jump onto isolated, squishy targets. His life-steal passive makes him incredibly difficult to duel 1v1. He dominates in Showdown but can struggle in open 3v3 maps against heavy crowd control.</p>
+              </div>
+            </div>
+
+            <div className={`faq-item ${openFaq === 3 ? 'open' : ''}`} onClick={() => toggleFaq(3)}>
+              <div className="faq-question">
+                <h3>Are there any active Brawl Stars Codes?</h3>
+                <span className="faq-icon">{openFaq === 3 ? '−' : '+'}</span>
+              </div>
+              <div className="faq-answer">
+                <p>Yes, Supercell occasionally releases <strong>Brawl Stars codes</strong> (often called Creator Codes or Promo Codes) during special events, esports tournaments, or major updates. These codes can reward you with pins, coins, or sometimes even small gem packs. We regularly monitor official social channels to bring you the latest working codes to boost your account progression.</p>
+              </div>
+            </div>
+
+            <div className={`faq-item ${openFaq === 4 ? 'open' : ''}`} onClick={() => toggleFaq(4)}>
+              <div className="faq-question">
+                <h3>Why are Spike and Leon so popular?</h3>
+                <span className="faq-icon">{openFaq === 4 ? '−' : '+'}</span>
+              </div>
+              <div className="faq-answer">
+                <p>Legendary brawlers like <strong>Spike Brawl Stars</strong> and <strong>Leon Brawl Stars</strong> are fan favorites because of their unique mechanics. Spike offers massive burst damage and area-denial with his super, making him a versatile pick in almost any mode. Leon, on the other hand, specializes in stealth. His invisibility super allows for devastating flank attacks, making him a nightmare for low-HP backline brawlers like Poco or Melodie.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         {/* Background Character Art Full Bleed */}
         <div className="character-bg-footer">
           <picture>
